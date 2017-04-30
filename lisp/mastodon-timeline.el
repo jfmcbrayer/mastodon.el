@@ -29,6 +29,8 @@
 
 ;;; Code:
 
+(require 'mastodon-http)
+
 (defgroup mastodon-timeline nil
   "Timeline-like behavior for Mastodon."
   :prefix "mastodon-timeline-"

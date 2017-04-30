@@ -62,5 +62,25 @@ Use NAME in definition."
             (replace-regexp "\n\n\n | " "\n | " nil (point-min) (point-max))
             (mastodon-media--inline-images))))
 
+(defmacro mastodon-timeline--define-update-from (timeline retrieval insert-point type)
+  "Define an interactive TIMELINE function to update buffer with RETRIEVAL function response.
+
+Display data at point returned by call to function INSERT-POINT.
+
+Name function with TYPE to distinguish different kinds of updates."
+  (let* ((func (intern (format "mastodon-%s--update-%s" timeline type)))
+         (docs (format "Update %s timeline with %s data." timeline type))
+         (render (intern (format "mastodon-%s--display" timeline))))
+    `(defun ,func () ,docs
+            (interactive)
+            (let* ((point-prev (point))
+                   (json (funcall ,retrieval)))
+              (when json
+                (with-current-buffer (current-buffer)
+                  (let ((inhibit-read-only t))
+                    (goto-char (funcall ,insert-point))
+                    (funcall #',render json)
+                    (goto-char point-prev))))))))
+
 (provide 'mastodon-timeline)
 ;;; mastodon-timeline.el ends here

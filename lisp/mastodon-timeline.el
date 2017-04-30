@@ -30,6 +30,7 @@
 ;;; Code:
 
 (require 'mastodon-http)
+(require 'mastodon-media)
 
 (defgroup mastodon-timeline nil
   "Timeline-like behavior for Mastodon."
@@ -51,6 +52,15 @@ Use NAME in definition."
                 (switch-to-buffer buffer)
                 (mastodon-timeline--display json))
               (mastodon-mode)))))
+
+(defmacro mastodon-timeline--define-display (timeline render)
+  "Define a TIMELINE function to call RENDER on data."
+  (let* ((func (intern (format "mastodon-%s--display" timeline)))
+         (docs (format "Call %s render function on data TOOTS." timeline)))
+    `(defun ,func (toots) ,docs
+            (mapcar ,render toots)
+            (replace-regexp "\n\n\n | " "\n | " nil (point-min) (point-max))
+            (mastodon-media--inline-images))))
 
 (provide 'mastodon-tiemline)
 ;;; mastodon-tl.el ends here

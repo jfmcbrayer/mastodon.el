@@ -15,13 +15,12 @@
 
 (ert-deftest mastodon-timline--define-display ()
   "Should define a function that displays timeline data."
-  (unwind-protect
-      (with-mock
-        (mock (mapcar (lambda () t) '(1 2 3)))
-        (mock (point-min) => 1)
-        (mock (point-max) => 9)
-        (mock (replace-regexp "\n\n\n | " "\n | " nil 1 9))
-        (mock (mastodon-media--inline-images))
-        (mastodon-timeline--define-display "foobar"
-                                           (lambda () t))
-        (mastodon-foobar--display '(1 2 3)))))
+  (with-mock
+    (mock (mapcar (lambda () t) '(1 2 3)))
+    (mock (point-min) => 1)
+    (mock (point-max) => 9)
+    (mock (replace-regexp "\n\n\n | " "\n | " nil 1 9))
+    (mock (mastodon-media--inline-images))
+    (mastodon-timeline--define-display "foobar"
+                                       (lambda () t))
+    (mastodon-foobar--display '(1 2 3))))

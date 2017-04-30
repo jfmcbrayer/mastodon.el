@@ -62,5 +62,5 @@ Use NAME in definition."
             (replace-regexp "\n\n\n | " "\n | " nil (point-min) (point-max))
             (mastodon-media--inline-images))))
 
-(provide 'mastodon-tiemline)
-;;; mastodon-tl.el ends here
+(provide 'mastodon-timeline)
+;;; mastodon-timeline.el ends here
